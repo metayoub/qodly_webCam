@@ -33,6 +33,8 @@ const WebCam: FC<IWebCamProps> = ({ mirrored, style, className, classNames = [] 
           const imageFile = dataURLtoFile(imageSrc, 'captured_photo.jpg');
 
           await ds.setValue<any>(null, imageFile);
+
+          emit('oncapture');
         } catch (error) {
           console.error('Error updating datasource:', error);
         }
@@ -40,27 +42,31 @@ const WebCam: FC<IWebCamProps> = ({ mirrored, style, className, classNames = [] 
         console.error('Failed to capture image or datasource is not available.');
       }
     }
-    emit('oncapture');
   }, [webcamRef, ds]);
 
   return (
     <div
       ref={connect}
       className={cn(
+        'webCamContainer',
         'flex items-center p-4 bg-gray-100 rounded-lg border border-gray-300 w-fit h-fit',
         className,
         classNames,
       )}
     >
       <Webcam
+        className="webCam"
         style={style}
         mirrored={mirrored}
         ref={webcamRef}
         screenshotFormat="image/jpeg"
         screenshotQuality={1}
       />
-      <button onClick={capture} className="p-3 bg-gray-200 rounded-full border-2 border-gray-300">
-        <MdOutlinePhotoCamera className="w-10 h-10 text-gray-600" />
+      <button
+        onClick={capture}
+        className="buttonCapture p-3 bg-gray-200 rounded-full border-2 border-gray-300"
+      >
+        <MdOutlinePhotoCamera className="iconCapture w-10 h-10 text-gray-600" />
       </button>
     </div>
   );
