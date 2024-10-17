@@ -2,7 +2,7 @@
   "app_id": "qodly_b6e080fa86a3580e4021",
   "name": "qodly_webcam",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.2.0",
   "type": "module",
   "author": {
     "name": "Qodly Team",
@@ -23,7 +23,7 @@
     "react-webcam": "^7.2.0"
   },
   "devDependencies": {
-    "@qodly/cli": "^0.2.10",
+    "@qodly/cli": "^0.2.15",
     "@types/react": "^18.2.48",
     "@types/react-dom": "^18.2.18",
     "@typescript-eslint/eslint-plugin": "^6.20.0",
