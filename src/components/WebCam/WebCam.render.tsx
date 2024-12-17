@@ -62,7 +62,7 @@ const WebCam: FC<IWebCamProps> = ({ mirrored, style, className, classNames = [] 
         screenshotQuality={1}
         videoConstraints={{ facingMode }}
       />
-      <div className="flex flex-row w-full justify-around absolute bottom-0 p-4">
+      <div className="buttonsBloc flex flex-row w-full justify-around absolute bottom-0 p-4">
         <button
           onClick={switchCamera}
           className="buttonSwicth p-3 bg-gray-200 rounded-full border-2 border-gray-300"

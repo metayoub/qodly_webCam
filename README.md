@@ -63,4 +63,19 @@ self .iconCapture:hover {
   color: #2d3748; /* Darker icon color on hover */
 }
 
+/* Switch Camera icon inside the button */
+self .buttonSwicth {
+  width: 40px;
+  height: 40px;
+  color: #4a5568; /* Dark gray icon */
+}
+
+self .buttonSwicth:hover {
+  color: #2d3748; /* Darker icon color on hover */
+}
+
+/* Reverse button */
+self .buttonsBloc {
+  flex-direction: row-reverse; /* reverse switch and capture buttons */
+}
 ```
