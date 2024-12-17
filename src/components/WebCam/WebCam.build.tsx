@@ -15,7 +15,7 @@ const WebCam: FC<IWebCamProps> = ({ style, className, classNames = [] }) => {
       style={style}
       className={cn(
         'webCamContainer',
-        'flex items-center justify-center space-x-4 p-4 bg-gray-100 rounded-lg border border-gray-300 w-fit h-fit',
+        'flex items-center justify-center space-x-4',
         className,
         classNames,
       )}

@@ -36,6 +36,10 @@ export default {
     style: {
       width: '450px',
       height: '300px',
+      backgroundColor: 'rgb(243 244 246)',
+      borderRadius: '0.5rem',
+      borderWidth: '1px',
+      borderColor: 'rgb(209 213 219)',
     },
   },
 } as T4DComponentConfig<IWebCamProps>;

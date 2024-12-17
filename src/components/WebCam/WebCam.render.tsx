@@ -1,7 +1,7 @@
 import { useRenderer, useSources } from '@ws-ui/webform-editor';
 import cn from 'classnames';
-import { FC, useRef, useCallback } from 'react';
-import { MdOutlinePhotoCamera } from 'react-icons/md';
+import { FC, useRef, useCallback, useState } from 'react';
+import { MdOutlinePhotoCamera, MdOutlineCameraswitch } from 'react-icons/md';
 import { IWebCamProps } from './WebCam.config';
 import Webcam from 'react-webcam';
 
@@ -10,7 +10,7 @@ const WebCam: FC<IWebCamProps> = ({ mirrored, style, className, classNames = [] 
   const {
     sources: { datasource: ds },
   } = useSources();
-
+  const [facingMode, setFacingMode] = useState('environment');
   const webcamRef = useRef<Webcam>(null);
 
   function dataURLtoFile(dataurl: string, filename: string) {
@@ -44,30 +44,38 @@ const WebCam: FC<IWebCamProps> = ({ mirrored, style, className, classNames = [] 
     }
   }, [webcamRef, ds]);
 
+  const switchCamera = useCallback(() => {
+    setFacingMode((prevState) => (prevState === 'user' ? 'environment' : 'user'));
+  }, []);
+
   return (
     <div
       ref={connect}
-      className={cn(
-        'webCamContainer',
-        'flex items-center p-4 bg-gray-100 rounded-lg border border-gray-300 w-fit h-fit',
-        className,
-        classNames,
-      )}
+      style={style}
+      className={cn('webCamContainer relative overflow-hidden', className, classNames)}
     >
       <Webcam
         className="webCam"
-        style={style}
         mirrored={mirrored}
         ref={webcamRef}
         screenshotFormat="image/jpeg"
         screenshotQuality={1}
+        videoConstraints={{ facingMode }}
       />
-      <button
-        onClick={capture}
-        className="buttonCapture p-3 bg-gray-200 rounded-full border-2 border-gray-300"
-      >
-        <MdOutlinePhotoCamera className="iconCapture w-10 h-10 text-gray-600" />
-      </button>
+      <div className="flex flex-row w-full justify-around absolute bottom-0 p-4">
+        <button
+          onClick={switchCamera}
+          className="buttonSwicth p-3 bg-gray-200 rounded-full border-2 border-gray-300"
+        >
+          <MdOutlineCameraswitch className="iconSwitch w-10 h-10 text-gray-600" />
+        </button>
+        <button
+          onClick={capture}
+          className="buttonCapture p-3 bg-gray-200 rounded-full border-2 border-gray-300"
+        >
+          <MdOutlinePhotoCamera className="iconCapture w-10 h-10 text-gray-600" />
+        </button>
+      </div>
     </div>
   );
 };
