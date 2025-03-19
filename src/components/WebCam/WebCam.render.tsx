@@ -6,7 +6,14 @@ import { IWebCamProps } from './WebCam.config';
 import Webcam from 'react-webcam';
 import { MdOutlineFileUpload } from 'react-icons/md';
 
-const WebCam: FC<IWebCamProps> = ({ mirrored, style, className, classNames = [] }) => {
+const WebCam: FC<IWebCamProps> = ({
+  cameraHeight,
+  cameraWidth,
+  mirrored,
+  style,
+  className,
+  classNames = [],
+}) => {
   const { connect, emit } = useRenderer();
   const {
     sources: { datasource: ds },
@@ -29,7 +36,10 @@ const WebCam: FC<IWebCamProps> = ({ mirrored, style, className, classNames = [] 
 
   const capture = useCallback(async () => {
     if (webcamRef.current) {
-      const imageSrc = webcamRef.current.getScreenshot();
+      const imageSrc = webcamRef.current.getScreenshot({
+        width: cameraWidth,
+        height: cameraHeight,
+      });
 
       if (imageSrc && ds) {
         try {
