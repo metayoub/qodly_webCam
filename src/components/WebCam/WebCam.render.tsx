@@ -122,9 +122,9 @@ const WebCam: FC<IWebCamProps> = ({
             </button>
             <button
               onClick={openFileUplaod}
-              className="buttonCapture p-3 bg-gray-200 rounded-full border-2 border-gray-300"
+              className="buttonUpload p-3 bg-gray-200 rounded-full border-2 border-gray-300"
             >
-              <MdOutlineFileUpload className="uploadimage w-10 h-10 text-gray-600" />
+              <MdOutlineFileUpload className="iconUpload w-10 h-10 text-gray-600" />
             </button>
             <input
               type="file"
