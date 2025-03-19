@@ -33,6 +33,8 @@ export default {
   },
   defaultProps: {
     mirrored: false,
+    cameraWidth: 1920,
+    cameraHeight: 1080,
     style: {
       width: '450px',
       height: '300px',
@@ -46,4 +48,6 @@ export default {
 
 export interface IWebCamProps extends webforms.ComponentProps {
   mirrored?: boolean;
+  cameraWidth: number;
+  cameraHeight: number;
 }

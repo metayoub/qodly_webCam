@@ -7,6 +7,16 @@ const commonSettings: TSetting[] = [
     label: 'Mirrored',
     type: ESetting.CHECKBOX,
   },
+  {
+    key: 'cameraWidth',
+    label: 'Camera width',
+    type: ESetting.NUMBER_FIELD,
+  },
+  {
+    key: 'cameraHeight',
+    label: 'Camera height',
+    type: ESetting.NUMBER_FIELD,
+  },
 ];
 
 const Settings: TSetting[] = [

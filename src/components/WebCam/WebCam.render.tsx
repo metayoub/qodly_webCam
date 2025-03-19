@@ -4,8 +4,16 @@ import { FC, useRef, useCallback, useState, useEffect } from 'react';
 import { MdOutlinePhotoCamera, MdOutlineCameraswitch } from 'react-icons/md';
 import { IWebCamProps } from './WebCam.config';
 import Webcam from 'react-webcam';
+import { MdOutlineFileUpload } from 'react-icons/md';
 
-const WebCam: FC<IWebCamProps> = ({ mirrored, style, className, classNames = [] }) => {
+const WebCam: FC<IWebCamProps> = ({
+  cameraHeight,
+  cameraWidth,
+  mirrored,
+  style,
+  className,
+  classNames = [],
+}) => {
   const { connect, emit } = useRenderer();
   const {
     sources: { datasource: ds },
@@ -13,6 +21,7 @@ const WebCam: FC<IWebCamProps> = ({ mirrored, style, className, classNames = [] 
   const [facingMode, setFacingMode] = useState('environment');
   const [cameraAccess, setCameraAccess] = useState(false);
   const webcamRef = useRef<Webcam>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   function dataURLtoFile(dataurl: string, filename: string) {
     var arr = dataurl.split(','),
@@ -27,7 +36,10 @@ const WebCam: FC<IWebCamProps> = ({ mirrored, style, className, classNames = [] 
 
   const capture = useCallback(async () => {
     if (webcamRef.current) {
-      const imageSrc = webcamRef.current.getScreenshot();
+      const imageSrc = webcamRef.current.getScreenshot({
+        width: cameraWidth,
+        height: cameraHeight,
+      });
 
       if (imageSrc && ds) {
         try {
@@ -48,6 +60,23 @@ const WebCam: FC<IWebCamProps> = ({ mirrored, style, className, classNames = [] 
   const switchCamera = useCallback(() => {
     setFacingMode((prevState) => (prevState === 'user' ? 'environment' : 'user'));
   }, []);
+
+  const openFileUplaod = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const uploadedImage = event.target.files?.[0];
+    if (uploadedImage && ds) {
+      try {
+        ds.setValue<any>(null, uploadedImage);
+      } catch (error) {
+        console.error('Failed to upload the selected image:', error);
+      }
+    }
+  };
 
   useEffect(() => {
     const checkCameraAccess = async () => {
@@ -91,6 +120,19 @@ const WebCam: FC<IWebCamProps> = ({ mirrored, style, className, classNames = [] 
             >
               <MdOutlinePhotoCamera className="iconCapture w-10 h-10 text-gray-600" />
             </button>
+            <button
+              onClick={openFileUplaod}
+              className="buttonUpload p-3 bg-gray-200 rounded-full border-2 border-gray-300"
+            >
+              <MdOutlineFileUpload className="iconUpload w-10 h-10 text-gray-600" />
+            </button>
+            <input
+              type="file"
+              ref={fileInputRef}
+              accept="image/*"
+              onChange={handleFileSelect}
+              className="fileUpload hidden"
+            />
           </div>
         </>
       ) : (
