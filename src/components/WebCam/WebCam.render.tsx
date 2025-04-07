@@ -72,6 +72,7 @@ const WebCam: FC<IWebCamProps> = ({
     if (uploadedImage && ds) {
       try {
         ds.setValue<any>(null, uploadedImage);
+        emit('oncapture');
       } catch (error) {
         console.error('Failed to upload the selected image:', error);
       }
