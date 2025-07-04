@@ -67,11 +67,67 @@ const WebCam: FC<IWebCamProps> = ({
     }
   };
 
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //function that will handle the pic compression , reads it and resizes it to the desired size
+  const resizeImage = (file: File, maxWidth: number, maxHeight: number): Promise<File> => {
+    return new Promise((resolve, reject) => {
+      const newImage = new Image();
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        if (!e.target?.result) return reject('FileReader failed');
+        newImage.src = e.target.result as string;
+      };
+
+      newImage.onload = () => {
+        const canvas = document.createElement('canvas');
+        let width = newImage.width;
+        let height = newImage.height;
+
+        if (width > height) {
+          if (width > maxWidth) {
+            height *= maxWidth / width;
+            width = maxWidth;
+          }
+        } else {
+          if (height > maxHeight) {
+            width *= maxHeight / height;
+            height = maxHeight;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+
+        const context = canvas.getContext('2d');
+        if (!context) return reject('Canvas context error');
+
+        context.drawImage(newImage, 0, 0, width, height);
+
+        canvas.toBlob(
+          (blob) => {
+            if (!blob) return reject('Compression failed');
+            const compressedFile = new File([blob], file.name, {
+              type: 'image/jpeg',
+            });
+            resolve(compressedFile);
+          },
+          'image/jpeg',
+          0.7, // =>for  good quality with reduced file size
+        );
+      };
+
+      newImage.onerror = reject;
+
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const uploadedImage = event.target.files?.[0];
     if (uploadedImage && ds) {
       try {
-        ds.setValue<any>(null, uploadedImage);
+        const resizedImage = await resizeImage(uploadedImage, cameraWidth, cameraHeight);
+        ds.setValue<any>(null, resizedImage);
         emit('oncapture');
       } catch (error) {
         console.error('Failed to upload the selected image:', error);
