@@ -63,6 +63,16 @@ self .iconCapture:hover {
   color: #2d3748; /* Darker icon color on hover */
 }
 
+/* Upload button */
+self .buttonCapture:hover {
+  background-color: #e2e8f0; /* Darker gray on hover */
+}
+
+/* upload icon inside the button */
+self .iconUpload {
+  color: #4a5568; /* Dark gray icon */
+}
+
 /* Switch Camera icon inside the button */
 self .buttonSwicth {
   width: 40px;
