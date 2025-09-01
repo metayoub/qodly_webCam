@@ -23,6 +23,7 @@ const WebCam: FC<IWebCamProps> = ({
   } = useSources();
   const [facingMode, setFacingMode] = useState('environment');
   const [cameraAccess, setCameraAccess] = useState(false);
+  const [cameraCount, setCameraCount] = useState(0);
   const webcamRef = useRef<Webcam>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -139,16 +140,22 @@ const WebCam: FC<IWebCamProps> = ({
   };
 
   useEffect(() => {
-    const checkCameraAccess = async () => {
+    const checkCameraAccessAndCount = async () => {
       try {
         await navigator.mediaDevices.getUserMedia({ video: true });
         setCameraAccess(true);
+
+        // Count available video input devices (cameras)
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const videoInputs = devices.filter((device) => device.kind === 'videoinput');
+        setCameraCount(videoInputs.length);
       } catch (error) {
         console.error('Camera access denied or not available:', error);
         setCameraAccess(false);
+        setCameraCount(0);
       }
     };
-    checkCameraAccess();
+    checkCameraAccessAndCount();
   }, []);
 
   return (
@@ -173,13 +180,15 @@ const WebCam: FC<IWebCamProps> = ({
             videoConstraints={{ facingMode }}
           />
           <div className="buttonsBloc flex flex-row w-full justify-around absolute bottom-0 p-4">
-            <button
-              onClick={switchCamera}
-              disabled={disabled}
-              className="buttonSwicth p-3 bg-gray-200 rounded-full border-2 border-gray-300"
-            >
-              <MdOutlineCameraswitch className="iconSwitch w-10 h-10 text-gray-600" />
-            </button>
+            {cameraCount > 1 && (
+              <button
+                onClick={switchCamera}
+                disabled={disabled}
+                className="buttonSwicth p-3 bg-gray-200 rounded-full border-2 border-gray-300"
+              >
+                <MdOutlineCameraswitch className="iconSwitch w-10 h-10 text-gray-600" />
+              </button>
+            )}
             <button
               onClick={capture}
               disabled={disabled}
