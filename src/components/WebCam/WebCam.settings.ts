@@ -8,6 +8,16 @@ const commonSettings: TSetting[] = [
     type: ESetting.CHECKBOX,
   },
   {
+    key: 'uploadPictures',
+    label: 'Upload Pictures',
+    type: ESetting.CHECKBOX,
+  },
+  {
+    key: 'screenshotQuality',
+    label: 'Screenshot Quality',
+    type: ESetting.NUMBER_FIELD,
+  },
+  {
     key: 'cameraWidth',
     label: 'Camera width',
     type: ESetting.NUMBER_FIELD,

@@ -33,6 +33,8 @@ export default {
   },
   defaultProps: {
     mirrored: false,
+    uploadPictures: false,
+    screenshotQuality: 1,
     cameraWidth: 1920,
     cameraHeight: 1080,
     style: {
@@ -50,4 +52,6 @@ export interface IWebCamProps extends webforms.ComponentProps {
   mirrored?: boolean;
   cameraWidth: number;
   cameraHeight: number;
+  uploadPictures: boolean;
+  screenshotQuality: number;
 }

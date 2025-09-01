@@ -4,7 +4,7 @@ import { FC } from 'react';
 import { MdOutlinePhotoCamera } from 'react-icons/md';
 import { IWebCamProps } from './WebCam.config';
 
-const WebCam: FC<IWebCamProps> = ({ style, className, classNames = [] }) => {
+const WebCam: FC<IWebCamProps> = ({ style, disabled, className, classNames = [] }) => {
   const {
     connectors: { connect },
   } = useEnhancedNode();
@@ -15,6 +15,7 @@ const WebCam: FC<IWebCamProps> = ({ style, className, classNames = [] }) => {
       style={style}
       className={cn(
         'webCamContainer',
+        disabled && 'opacity-50 cursor-not-allowed',
         'flex items-center justify-center space-x-4',
         className,
         classNames,

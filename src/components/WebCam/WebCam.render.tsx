@@ -10,7 +10,10 @@ const WebCam: FC<IWebCamProps> = ({
   cameraHeight,
   cameraWidth,
   mirrored,
+  uploadPictures,
+  screenshotQuality = 1,
   style,
+  disabled,
   className,
   classNames = [],
 }) => {
@@ -152,7 +155,12 @@ const WebCam: FC<IWebCamProps> = ({
     <div
       ref={connect}
       style={style}
-      className={cn('webCamContainer relative overflow-hidden', className, classNames)}
+      className={cn(
+        'webCamContainer relative overflow-hidden',
+        disabled && 'opacity-50 cursor-not-allowed',
+        className,
+        classNames,
+      )}
     >
       {cameraAccess ? (
         <>
@@ -161,35 +169,43 @@ const WebCam: FC<IWebCamProps> = ({
             mirrored={mirrored}
             ref={webcamRef}
             screenshotFormat="image/jpeg"
-            screenshotQuality={1}
+            screenshotQuality={screenshotQuality}
             videoConstraints={{ facingMode }}
           />
           <div className="buttonsBloc flex flex-row w-full justify-around absolute bottom-0 p-4">
             <button
               onClick={switchCamera}
+              disabled={disabled}
               className="buttonSwicth p-3 bg-gray-200 rounded-full border-2 border-gray-300"
             >
               <MdOutlineCameraswitch className="iconSwitch w-10 h-10 text-gray-600" />
             </button>
             <button
               onClick={capture}
+              disabled={disabled}
               className="buttonCapture p-3 bg-gray-200 rounded-full border-2 border-gray-300"
             >
               <MdOutlinePhotoCamera className="iconCapture w-10 h-10 text-gray-600" />
             </button>
-            <button
-              onClick={openFileUplaod}
-              className="buttonUpload p-3 bg-gray-200 rounded-full border-2 border-gray-300"
-            >
-              <MdOutlineFileUpload className="iconUpload w-10 h-10 text-gray-600" />
-            </button>
-            <input
-              type="file"
-              ref={fileInputRef}
-              accept="image/*"
-              onChange={handleFileSelect}
-              className="fileUpload hidden"
-            />
+            {uploadPictures && (
+              <>
+                {' '}
+                <button
+                  onClick={openFileUplaod}
+                  className="buttonUpload p-3 bg-gray-200 rounded-full border-2 border-gray-300"
+                  disabled={disabled}
+                >
+                  <MdOutlineFileUpload className="iconUpload w-10 h-10 text-gray-600" />
+                </button>
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  accept="image/*"
+                  onChange={handleFileSelect}
+                  className="fileUpload hidden"
+                />{' '}
+              </>
+            )}
           </div>
         </>
       ) : (
