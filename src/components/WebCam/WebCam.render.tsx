@@ -2,6 +2,7 @@ import { useRenderer, useSources } from '@ws-ui/webform-editor';
 import cn from 'classnames';
 import { FC, useRef, useCallback, useState, useEffect } from 'react';
 import { MdOutlinePhotoCamera, MdOutlineCameraswitch } from 'react-icons/md';
+import { MdFlashlightOn, MdFlashlightOff } from 'react-icons/md';
 import { IWebCamProps } from './WebCam.config';
 import Webcam from 'react-webcam';
 import { MdOutlineFileUpload } from 'react-icons/md';
@@ -26,6 +27,8 @@ const WebCam: FC<IWebCamProps> = ({
   const [cameraCount, setCameraCount] = useState(0);
   const webcamRef = useRef<Webcam>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [torchAvailable, setTorchAvailable] = useState(false);
+  const [torchOn, setTorchOn] = useState(false);
 
   function dataURLtoFile(dataurl: string, filename: string) {
     var arr = dataurl.split(','),
@@ -116,7 +119,7 @@ const WebCam: FC<IWebCamProps> = ({
             resolve(compressedFile);
           },
           'image/jpeg',
-          0.7, // =>for  good quality with reduced file size
+          screenshotQuality, // =>for  good quality with reduced file size
         );
       };
 
@@ -142,21 +145,49 @@ const WebCam: FC<IWebCamProps> = ({
   useEffect(() => {
     const checkCameraAccessAndCount = async () => {
       try {
-        await navigator.mediaDevices.getUserMedia({ video: true });
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode } });
         setCameraAccess(true);
 
         // Count available video input devices (cameras)
         const devices = await navigator.mediaDevices.enumerateDevices();
         const videoInputs = devices.filter((device) => device.kind === 'videoinput');
         setCameraCount(videoInputs.length);
+
+        // Torch support detection
+        const videoTrack = stream.getVideoTracks()[0];
+        if (videoTrack && typeof videoTrack.getCapabilities === 'function') {
+          const capabilities = videoTrack.getCapabilities() as any;
+          setTorchAvailable(!!capabilities.torch);
+        } else {
+          setTorchAvailable(false);
+        }
+        // Stop the stream after checking
+        stream.getTracks().forEach((track) => track.stop());
       } catch (error) {
         console.error('Camera access denied or not available:', error);
         setCameraAccess(false);
         setCameraCount(0);
+        setTorchAvailable(false);
       }
     };
     checkCameraAccessAndCount();
-  }, []);
+    // Re-run when facingMode changes (camera switch)
+  }, [facingMode]);
+
+  // Torch toggle handler
+  const handleTorchToggle = async () => {
+    if (webcamRef.current && webcamRef.current.video && webcamRef.current.stream) {
+      const videoTrack = webcamRef.current.stream.getVideoTracks()[0];
+      if (videoTrack && typeof videoTrack.applyConstraints === 'function') {
+        try {
+          await videoTrack.applyConstraints({ advanced: [{ torch: !torchOn }] } as any);
+          setTorchOn((prev) => !prev);
+        } catch (err) {
+          console.error('Failed to toggle torch:', err);
+        }
+      }
+    }
+  };
 
   return (
     <div
@@ -180,6 +211,20 @@ const WebCam: FC<IWebCamProps> = ({
             videoConstraints={{ facingMode }}
           />
           <div className="buttonsBloc flex flex-row w-full justify-around absolute bottom-0 p-4">
+            {torchAvailable && (
+              <button
+                onClick={handleTorchToggle}
+                disabled={disabled}
+                className="buttonTorch p-3 bg-gray-200 rounded-full border-2 border-gray-300"
+                title={torchOn ? 'Turn off torch' : 'Turn on torch'}
+              >
+                {torchOn ? (
+                  <MdFlashlightOn className="iconTorch w-10 h-10 text-yellow-500" />
+                ) : (
+                  <MdFlashlightOff className="iconTorch w-10 h-10 text-gray-600" />
+                )}
+              </button>
+            )}
             {cameraCount > 1 && (
               <button
                 onClick={switchCamera}

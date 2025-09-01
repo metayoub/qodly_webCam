@@ -11,6 +11,15 @@ This is a WebCam Component that allows you to capture pictures using your mobile
 - Capture images in JPEG format with high quality.
 - Update a datasource with the captured image file.
 - Trigger a custom `oncapture` event after successfully capturing an image.
+- **Camera switch button** is only displayed if multiple cameras are available.
+- **Torch (flashlight) button** is displayed if the current camera supports torch, allowing you to toggle the flashlight on/off.
+
+## Controls
+
+- **Capture Button**: Take a photo from the webcam.
+- **Switch Camera Button**: Switch between front and back cameras (if more than one is available).
+- **Torch Button**: Toggle the camera's flashlight/torch (if supported by the device).
+- **Upload Button**: Upload an image from your device.
 
 ## Custom CSS
 
@@ -63,9 +72,39 @@ self .iconCapture:hover {
   color: #2d3748; /* Darker icon color on hover */
 }
 
+/* Torch button */
+self .buttonTorch {
+  padding: 12px;
+  background-color: #edf2f7;
+  border-radius: 50%;
+  border: 2px solid #e2e8f0;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+self .buttonTorch:hover {
+  background-color: #e2e8f0;
+}
+
+/* Torch icons */
+self .iconTorch {
+  width: 40px;
+  height: 40px;
+  color: #fbbf24; /* Yellow for on, gray for off */
+}
+
 /* Upload button */
-self .buttonCapture:hover {
-  background-color: #e2e8f0; /* Darker gray on hover */
+self .buttonUpload {
+  padding: 12px;
+  background-color: #edf2f7;
+  border-radius: 50%;
+  border: 2px solid #e2e8f0;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+self .buttonUpload:hover {
+  background-color: #e2e8f0;
 }
 
 /* upload icon inside the button */
