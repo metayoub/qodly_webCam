@@ -154,6 +154,7 @@ const WebCam: FC<IWebCamProps> = ({
         setCameraCount(videoInputs.length);
 
         // Torch support detection
+        setTorchOn(false);
         const videoTrack = stream.getVideoTracks()[0];
         if (videoTrack && typeof videoTrack.getCapabilities === 'function') {
           const capabilities = videoTrack.getCapabilities() as any;
