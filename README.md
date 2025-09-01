@@ -1,6 +1,6 @@
 # Overview
 
-This is a WebCam Component that allows you to capture pictures using your mobile or laptop camera. It utilizes the `react-webcam` library to provide an easy-to-use interface for image capture. The component also includes options for mirroring the webcam feed and capturing high-quality JPEG images.
+This is a WebCam Component that allows you to capture pictures using your mobile or laptop camera. It utilizes the `react-webcam` library to provide an easy-to-use interface for image capture. The component also includes options for mirroring the webcam feed and capturing high-quality JPEG images. The `screenshotQuality` prop allows you to control the quality of the captured JPEG image (value between 0 and 1).
 
 ![WebCam](./public/webCam.png)
 
@@ -8,11 +8,21 @@ This is a WebCam Component that allows you to capture pictures using your mobile
 
 - Capture images from a webcam (mobile or desktop).
 - Mirror the webcam feed if desired.
-- Capture images in JPEG format with high quality.
+- Capture images in JPEG format with configurable quality (`screenshotQuality` between 0 and 1).
 - Update a datasource with the captured image file.
 - Trigger a custom `oncapture` event after successfully capturing an image.
 - **Camera switch button** is only displayed if multiple cameras are available.
 - **Torch (flashlight) button** is displayed if the current camera supports torch, allowing you to toggle the flashlight on/off.
+
+## Props
+
+| Name              | Type    | Default | Description                                                             |
+| ----------------- | ------- | ------- | ----------------------------------------------------------------------- |
+| screenshotQuality | number  | 1       | Quality of the captured JPEG image, between 0 (lowest) and 1 (highest). |
+| cameraHeight      | number  | 1080    | Height of the camera feed in pixels.                                    |
+| cameraWidth       | number  | 1920    | Width of the camera feed in pixels.                                     |
+| mirrored          | boolean | false   | Whether to mirror the webcam feed.                                      |
+| uploadPictures    | boolean | false   | Whether to allow image upload from device.                              |
 
 ## Controls
 
